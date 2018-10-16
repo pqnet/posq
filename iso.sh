@@ -12,4 +12,4 @@ menuentry "posq" {
 	multiboot /boot/posq.elf
 }
 EOF
-grub-mkrescue -o posq.iso isodir
+grub-mkrescue -o boot.iso isodir

@@ -4,16 +4,21 @@ OUTPUT_FORMAT(elf64-x86-64);
 SECTIONS {
     . = 0x10000;
 
-    .multiboot : ALIGN(4096) {
-        multiboot.o(.multiboot)
-        multiboot.o(.data)
+    .multiboot : ALIGN(4) {
+        LONG(0x1BADB002)
+        LONG(3)
+        LONG(-0x1BADB005)
     }
 
-    .bootstrap : ALIGN(4096) {
-        multiboot.o(.text)
+    .rodata0 : ALIGN(4096) {
+        *multiboot.o(.data)
     }
 
-    .rodata : ALIGN(4096) {
+    .text0 : ALIGN(4096) {
+        *multiboot.o(.text)
+    }
+
+    .rodata1 : ALIGN(4096) {
         *(.rodata)
     }
 
@@ -21,7 +26,7 @@ SECTIONS {
         *(.data)
     }
 
-    .text : ALIGN(4096) {
+    .text1 : ALIGN(4096) {
         *(.text)
     }
 

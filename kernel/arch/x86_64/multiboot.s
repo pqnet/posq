@@ -1,18 +1,5 @@
 
 .code32
-/* Declare constants for the multiboot header. */
-.set ALIGN,    1<<0             /* align loaded modules on page boundaries */
-.set MEMINFO,  1<<1             /* provide memory map */
-.set FLAGS,    ALIGN | MEMINFO  /* this is the Multiboot 'flag' field */
-.set MAGIC,    0x1BADB002       /* 'magic number' lets bootloader find the header */
-.set CHECKSUM, -(MAGIC + FLAGS) /* checksum of above, to prove we are multiboot */
-
-# multiboot header. Allow the kernel to be loaded by bootloaders
-.section .multiboot # a separate section so that it can be put at beginning of final binary by the linker
-.align 4 # align at 32bit boundaries
-.long MAGIC # bootloader looks for this magic in the first 8k of the kernel
-.long FLAGS 
-.long CHECKSUM # a bit more insurance that this header is multiboot and not actually something else
 
 # stub stack. A small empty space to be used as stack for the boot configuration
 .section .bss
@@ -170,6 +157,7 @@ _start64:
     movq $0xffffffff, %rdi
     add $1, %rdi
     jz halt # this fails if we are not really in 64bit mode. The register does not have enough space to add one to FFFFFF
+    call _enableSSE
     mov $YEAH64, %rcx
     mov $240, %rdx
     call _printat
@@ -226,4 +214,14 @@ printEnd:
     ret
 .size _printat, . - _printat
 
-
+# clang (and maybe gcc, didn't see it doing that yet) will generate SSE code on x86-64 by default.
+# We need to enable SSE for it to work, before calling any C/C++ code
+_enableSSE:
+    mov %cr0, %rax
+    and $0xfffb, %ax # 1<<2 is coprocessor emulator (disable)
+    or $0x2, %ax # 1<<1 is coprocessor monitoring
+    mov %rax, %cr0
+    mov %cr4, %rax 
+    or $(3<<9), %ax # 1<<9 is the support for instruction to save/restore FPU state, 1<<10 enable handling of SSE exceptions
+    mov %rax, %cr4
+    ret
