@@ -45,7 +45,9 @@ public:
     void moveCursor(uint16_t pos);
     void moveCursor(int x, int y);
 
+    void writeChar(char c);
     void writeString(char const * c );
+    void writeData(char const * c, size_t length );
     void writeNumber(int64_t number, int minWidth=1, int base = 10);
 
     template<typename firstArg, typename ... argTypes>

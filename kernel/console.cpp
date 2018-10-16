@@ -120,6 +120,23 @@ void Console::carriageReturn()
     setCursor(cursorPosition - cursorPosition % screen_width);
 }
 
+void Console::writeData(char const *c, size_t length)
+{
+    while (length--)
+    {
+        switch (char out = *c)
+        {
+        case '\n':
+            carriageReturn();
+            lineFeed();
+            break;
+        default:
+            outChar(out);
+        }
+    }
+    updateCursor();
+}
+
 void Console::writeString(char const *c)
 {
     char out;
@@ -134,6 +151,20 @@ void Console::writeString(char const *c)
         default:
             outChar(out);
         }
+    }
+    updateCursor();
+}
+
+void Console::writeChar(char c)
+{
+    switch (c)
+    {
+    case '\n':
+        carriageReturn();
+        lineFeed();
+        break;
+    default:
+        outChar(c);
     }
     updateCursor();
 }
@@ -262,4 +293,22 @@ void Console::clearScreen()
     {
         *i = 0;
     }
+}
+
+#include <tty.h>
+
+void
+terminal_initialize(){
+    console.initialize();
+}
+
+void terminal_putchar(char c) {
+    console.writeChar(c);
+}
+void terminal_write(const char* data, size_t size) {
+    console.writeData(data, size);
+}
+
+void terminal_writestring(const char* data) {
+    console.writeString(data);
 }
