@@ -9,7 +9,7 @@ CXXFLAGS=-g -fpie -ffreestanding
 
 all: sys.elf boot.iso
 
-sys.elf: linker.ld multiboot.o
+sys.elf: linker.ld multiboot.o sys.o
 	ld -g  -z max-page-size=0x1000 -T $^ -o $@
 
 multiboot.o: multiboot.s

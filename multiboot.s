@@ -173,7 +173,7 @@ _start64:
     mov $YEAH64, %rcx
     mov $240, %rdx
     call _printat
-    # call main
+    call _cstart
     # parameters on rdi, rsi, rdx, rcx
     # go back in 32bit mode
     movq $(1<<31 | 1<<0), %rbx
