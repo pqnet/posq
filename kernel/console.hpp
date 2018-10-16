@@ -13,7 +13,7 @@ struct alignas(1) VGACell
     uint8_t pen;
     };
 };
-static_assert(sizeof(VGACell) == 2);
+static_assert(sizeof(VGACell) == 2, "VGACell too big (not packed?)");
 #pragma pack(pop)
 
 class Console
