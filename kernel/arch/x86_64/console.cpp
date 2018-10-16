@@ -1,4 +1,5 @@
-#include "console.hpp"
+#include "../../console.hpp"
+#include <kernel/tty.h>
 
 Console console;
 
@@ -294,8 +295,6 @@ void Console::clearScreen()
         *i = 0;
     }
 }
-
-#include <tty.h>
 
 void
 terminal_initialize(){

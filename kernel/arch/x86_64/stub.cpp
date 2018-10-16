@@ -1,5 +1,5 @@
 #include <cstdint>
-#include "stub.hpp"
+#include "../../stub.hpp"
 // a printxy function to be used until terminal is initialized properly and we can implement a printf
 void printxy(const char* text, int row, int column) {
     uint64_t offset = column + row * 80;

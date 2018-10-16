@@ -1,4 +1,5 @@
 #include <cstdint>
+#include <cstddef>
 
 #pragma pack(push, 1)
 struct alignas(1) VGACell
