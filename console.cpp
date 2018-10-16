@@ -190,9 +190,9 @@ const char *Console::_printf(const char *format, char const *arg)
                 writeString(arg);
                 return format;
             default:
-                    outChar(out);
-                    outChar(control);
-                    return format;
+                outChar(out);
+                outChar(control);
+                return format;
             }
             break;
         default:
@@ -215,30 +215,31 @@ const char *Console::_printf(const char *format, int64_t arg)
         case '%':
             int minWidth;
             minWidth = 0;
-        loop:
-                char control;
+            char control;
+            control = *format++;
+            while (control >= '0' && control <= '9')
+            {
+                minWidth *= 10;
+                minWidth += control - '0';
                 control = *format++;
-                if (control >= '0' && control <= '9') {
-                    minWidth *=10;
-                    minWidth += control - '0';
-                    goto loop;
-                }
-                switch (control)
-                {
-                case '%':
-                    outChar('%');
-                    break;
-                case 'd':
-                    writeNumber(arg, minWidth || 1);
-                    return format;
-                case 'x':
-                    writeNumber(arg, minWidth || 1, 16);
-                    return format;
-                default:
-                    outChar(out);
-                    outChar(control);
-                    return format;
-                }
+            }
+
+            switch (control)
+            {
+            case '%':
+                outChar('%');
+                break;
+            case 'd':
+                writeNumber(arg, minWidth ? minWidth : 1);
+                return format;
+            case 'x':
+                writeNumber(arg, minWidth ? minWidth : 1, 16);
+                return format;
+            default:
+                outChar(out);
+                outChar(control);
+                return format;
+            }
             break;
         default:
             outChar(out);
@@ -253,10 +254,12 @@ void Console::initialize()
     pen = 0x7;
 }
 
-void Console::clearScreen() {
-    auto range_begin = reinterpret_cast<uint64_t*>(vram_base_address());
+void Console::clearScreen()
+{
+    auto range_begin = reinterpret_cast<uint64_t *>(vram_base_address());
     auto range_end = range_begin + (buffer_size / 4);
-    for (auto i = range_begin; i< range_end; i++) {
+    for (auto i = range_begin; i < range_end; i++)
+    {
         *i = 0;
     }
 }
