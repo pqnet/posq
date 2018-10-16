@@ -28,8 +28,8 @@ export LDFLAGS=""
 # Configure the cross-compiler to use the desired system root.
 
 export SYSROOT="$(pwd)/sysroot"
-export CC="$CC -D__ELF__ -D_LIBCPP_HAS_NO_THREADS --sysroot=$SYSROOT -I$INCLUDEDIR -I$INCLUDEDIR/c++/v1"
-export CXX="$CXX -D__ELF__ -D_LIBCPP_HAS_NO_THREADS --sysroot=$SYSROOT -I$INCLUDEDIR -I$INCLUDEDIR/c++/v1"
+export CC="$CC -mcmodel=kernel -D__ELF__ -D_LIBCPP_HAS_NO_THREADS --sysroot=$SYSROOT -I$INCLUDEDIR -I$INCLUDEDIR/c++/v1"
+export CXX="$CXX -mcmodel=kernel -D__ELF__ -D_LIBCPP_HAS_NO_THREADS --sysroot=$SYSROOT -I$INCLUDEDIR -I$INCLUDEDIR/c++/v1"
 # export SYSROOT="$TOOLCHAIN_ROOT"
 
 # Work around that the -elf gcc targets doesn't have a system include directory

@@ -8,7 +8,7 @@ OUTPUT_FORMAT(elf64-x86-64);
  * Eventually we will unmap the bootstrap page, so we don't care if we use 2mb at beginning.
  */
 
-KERNEL_VIRTUAL_BASE = 0xC0000000;
+KERNEL_VIRTUAL_BASE = 0xffffffff80000000;
 
 SECTIONS {
     /* bigpage n1. Multiboot header, 32-bit launcher etc */

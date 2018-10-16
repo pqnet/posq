@@ -91,22 +91,26 @@ _start:
     rep stosl # memset(%edi, %eax, %ecx)
     mov %edx, %edi
 
-    # PML4[0] = PDPT
-        lea 0x1003(%edi), %eax
-        mov %eax, (%edi)
-    add $0x1000, %edi
-    # PDPT[0] = PDT0
-    # PDPT[3] = PDT2
+    # PML4[0] = PDPT0
+    # PML4[511] = PDPT511
         lea 0x1003(%edi), %eax
         mov %eax, (%edi)
         lea 0x2003(%edi), %eax
-        mov %eax, 0x18(%edi)
+        mov %eax, 0xff8(%edi)
+    add $0x1000, %edi
+    # PDPT0[0] = PDT0
+        lea 0x2003(%edi), %eax
+        mov %eax, (%edi)
+    add $0x1000, %edi
+    # PDPT511[510] = PDT-1
+        lea 0x2003(%edi), %eax
+        mov %eax, 0xff0(%edi)
     add $0x1000, %edi
     # PD0[0] = 0x83, the bootstrap map
         mov $0x83, %eax
         mov %eax, (%edi)
     add $0x1000, %edi
-    # PD3[0] = 0x200083, the kernel map
+    # PD-1[0] = 0x200083, the kernel map
         add $BOOTSTRAP_END, %eax
         mov %eax, (%edi)
 
@@ -236,10 +240,12 @@ stack_top:
 # space the kernel was linked into (as of now, 0xc0000000)
 PML4T:
 .skip 0x1000
-# PDPT:
+# PDPT0:
+.skip 0x1000
+# PDPT511:
 .skip 0x1000
 # PDT0: # pdt0[0] should map 1:1 the first 2mb of memory. The 64bit pointer value should be is 0x83
 .skip 0x1000
-# PDT3: # pdt3[0] should map the second 2mb of memory. The 64bit pointer should be 0x83 + 0x200000 = 0x200083
+# PDT-1: # pdt-1[0] should map the second 2mb of memory. The 64bit pointer should be 0x83 + 0x200000 = 0x200083
 .skip 0x1000
 table_end:
