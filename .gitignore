@@ -3,3 +3,6 @@
 *.iso
 *~
 *.d
+isodir
+sysroot
+libc/libk.a
