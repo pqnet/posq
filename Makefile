@@ -10,7 +10,7 @@ CXXFLAGS=-g -ffreestanding
 
 all: kernel.elf boot.iso
 
-kernel.elf: linker.ld multiboot.o sys.o stub.o
+kernel.elf: linker.ld multiboot.o sys.o stub.o console.o
 	$(LINKER) $(KLFLAGS) $(KLIBS) -g -Wl,--build-id=none -Wl,-z,max-page-size=0x1000 -Wl,-T,$^ -o $@
 
 multiboot.o: multiboot.s
