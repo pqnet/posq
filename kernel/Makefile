@@ -12,11 +12,12 @@ all: kernel.elf
 
 kernel.elf: linker.ld multiboot.o sys.o stub.o console.o
 	$(LINKER) $(KLFLAGS) $(KLIBS) -g -Wl,--build-id=none -Wl,-z,max-page-size=0x1000 -Wl,-T,$^ -o $@
+	grub-file --is-x86-multiboot $@
 
 multiboot.o: multiboot.s
 	as -g $^ -o $@
 
 clean:
-	rm -fr *.o sys.bin sys.elf
+	rm -fr *.o sys.bin kernel.elf
 
 .PHONY: clean all
