@@ -16,17 +16,18 @@ void Console::enableCursor()
         mov $0x3d4, %%dx
         outb %%al, %%dx
 
-        inb $0x3d5, %%al
+        mov $0x3d5, %%dx
+        inb %%dx, %%al
         andb $0xc0, %%al
             orb $14, %%al
-        mov $0x3d5, %%dx
         outb %%al, %%dx
 
         movb $0x0b, %%al
         mov $0x3d4, %%dx
         outb %%al, %%dx
 
-        inb $0x3d5, %%al
+        mov $0x3d5, %%dx
+        inb %%dx, %%al
         andb $0xe0, %%al
             orb $15, %%al
         mov $0x3d5, %%dx
