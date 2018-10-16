@@ -1,16 +1,17 @@
 # gcc suite 8+ needed for static-pie
 CC=/usr/bin/gcc-8
 CXX=/usr/bin/g++-8
+LINKER=$(CXX)
 #-Wl,--oformat=binary -nodefaultlibs
-KLFLAGS=-static-pie -ffreestanding
+KLFLAGS=-static -ffreestanding
 KLIBS=-nostdlib -lgcc -ffreestanding
-CFLAGS=-g -fpie -ffreestanding
-CXXFLAGS=-g -fpie -ffreestanding
+CFLAGS=-g -ffreestanding
+CXXFLAGS=-g -ffreestanding
 
-all: sys.elf boot.iso
+all: kernel.elf boot.iso
 
-sys.elf: linker.ld multiboot.o sys.o
-	ld -g  -z max-page-size=0x1000 -T $^ -o $@
+kernel.elf: linker.ld multiboot.o sys.o
+	$(LINKER) $(KLFLAGS) $(KLIBS) -g -Wl,--build-id=none -Wl,-z,max-page-size=0x1000 -Wl,-T,$^ -o $@
 
 multiboot.o: multiboot.s
 	as -g $^ -o $@
@@ -18,8 +19,8 @@ multiboot.o: multiboot.s
 clean:
 	rm -fr *.o sys.bin sys.elf boot.iso
 
-boot.iso: sys.elf
-	cp sys.elf iso/boot/posq.elf
+boot.iso: kernel.elf
+	cp kernel.elf iso/boot/posq.elf
 	grub-mkrescue -o boot.iso iso
 
 .PHONY: clean all
