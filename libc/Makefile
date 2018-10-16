@@ -15,8 +15,8 @@ LIBDIR?=$(EXEC_PREFIX)/lib
  
 CFLAGS:=$(CFLAGS) -ffreestanding -Wall -Wextra
 CPPFLAGS:=$(CPPFLAGS) -D__is_libc -Iinclude
-LIBK_CFLAGS:=$(CFLAGS)
-LIBK_CPPFLAGS:=$(CPPFLAGS) -D__is_libk
+LIBK_CFLAGS:=$(CFLAGS) -fno-exceptions -fno-unwind-tables
+LIBK_CPPFLAGS:=$(CPPFLAGS) -fno-exceptions -fno-unwind-tables -fno-rtti -D__is_libk
  
 ARCHDIR=arch/$(HOSTARCH)
  
