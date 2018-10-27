@@ -113,6 +113,12 @@ _start:
     # PD-1[0] = 0x200083, the kernel map
         add $BOOTSTRAP_END, %eax
         mov %eax, (%edi)
+    # PD-1[1] maps the following 2mb, where the kernel page structures are supposedly located
+        add $0x200000, %eax
+        mov %eax, 0x8(%edi)
+    # PD-1[2] let's also map 2 more megabytes, to be safe.
+        add $0x200000, %eax
+        mov %eax, 0x10(%edi)
 
 #    mov $512, %ecx
 #    movl $3, %ebx
