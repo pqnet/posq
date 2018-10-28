@@ -3,7 +3,7 @@ HOST?=DEFAULT_HOST
 HOSTARCH!=../target-triplet-to-arch.sh $(HOST)
  
 CFLAGS?=-O2 -g
-CPPFLAGS?=
+CPPFLAGS?=$(CFLAGS)
 LDFLAGS?=
 LIBS?=
  
@@ -66,8 +66,9 @@ $(ARCHDIR)/crtbegin.o $(ARCHDIR)/crtend.o:
 	$(CC) -MD -c $< -o $@ -std=gnu11 $(CFLAGS) $(CPPFLAGS)
  
 .s.o:
-	$(CC) -MD -c $< -o $@ $(CFLAGS) $(CPPFLAGS)
- 
+	$(CXX) -fdebug-prefix-map=$$(pwd)=$$(pwd)/$$(dirname $<) -MD -c $< -o $@ $(CFLAGS) $(CPPFLAGS)
+	#-Wa,-main-file-name,$<
+
 clean:
 	rm -f kernel.elf
 	rm -f $(OBJS) *.o */*.o */*/*.o
