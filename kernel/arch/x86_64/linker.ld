@@ -26,6 +26,13 @@ SECTIONS {
     .text0 ALIGN(4096) : {
         *multiboot.o(.text)
     }
+    /* constructor table */
+    .ctors : {
+        CTORS_BEGIN = .;
+        *(.ctors)
+        CTORS_END = .;
+    }
+
     .bss0 ALIGN(4096): {
         *multiboot.o(.bss)
     }

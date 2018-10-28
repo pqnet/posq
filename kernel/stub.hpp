@@ -2,3 +2,5 @@
 #include <cstdint>
 
 void printxy(const char* text, int row, int column);
+
+void init_ctors();

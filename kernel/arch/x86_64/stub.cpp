@@ -10,3 +10,15 @@ void printxy(const char* text, int row, int column) {
         call *%%rax
     )" : : "r" (text), "r" (offset) : "%rax", "%rcx", "%rdx" );
 }
+
+extern "C" {
+    extern void * CTORS_BEGIN;
+    extern void * CTORS_END;
+}
+
+void init_ctors() {
+    for (auto c = &CTORS_BEGIN; c < &CTORS_END; c++) {
+        auto constructor = reinterpret_cast<void(*)(void)>(*c);
+        constructor();
+    }
+}

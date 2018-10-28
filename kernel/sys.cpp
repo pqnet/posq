@@ -14,6 +14,7 @@ void _cstart() {
     console.disableCursor();
     console.enableCursor();
     console.moveCursor(0,0);
+    init_ctors();
     for (int i = 0; i < 25; i++) {
         console.writeString("0x");
         console.writeNumber(i, 2, 16);
